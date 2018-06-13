@@ -2,10 +2,17 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import db from "./database/fakedatabase.js";
+import { connect } from "react-redux";
+import { getUsers } from "./store/actions/user.js";
 
 class App extends Component {
+  componentDidMount() {
+    // this.props.dispatch(getUsers(db.user));
+    this.props.getUsers(db.users);
+  }
+
   render() {
-    let users = db.users;
+    let users = this.props.user;
     return (
       <div>
         <div className="App">
@@ -46,4 +53,15 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  users: state.users
+});
+
+const mapDispatchToProps = dispatch => ({
+  getUsers: users => dispatch(getUsers(users))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
